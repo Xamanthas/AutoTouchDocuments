@@ -1,132 +1,428 @@
-# AutoTouch Document
+<h1 id="title">AutoTouch Documentation</h1>
 
-`Fit for v4.3.8 and above`
+`Applicable for v5.0.6 and above`
 
-> - AutoTouch is a “Macro” tool used to record and playback human touching and pressing on the mobile device.
-> - It simulates touching and keys pressing.
-> - It runs Lua scripts.
-> - It provides several extended functions to achieve automation.
-> - It needs Jailbreak environment.
+> - AutoTouch is a 'Macro' tool used to record and playback human-like inputs on an IOS device.
+> - It is able simulate touch and key presses, through Lua scripting.
+> - It has several extended functions to help you achieve automation.
 > - It provides a Script Store to sell and buy scripts.
+> - Requires a supported jailbroken device (jailbreaks on IOS 8 to IOS 12.1.2), uses [Lua 5.3.5](https://www.lua.org/manual/5.3/) <br>
+>
+> Normal releases can be found at http://apt.autotouch.net. Beta releases can be found at http://beta.autotouch.net
+>
+> Note: AutoTouch will also be referred to as 'AT' throughout this document.
 
-[TOC]
+<div class='md-toc' mdtype='toc'>
+    <p class="md-toc-content">
+    <span class="md-toc-item md-toc-h1"><a class="md-toc-inner" href="#title">AutoTouch Documentation</a></span>
+    <span class="md-toc-item md-toc-h1"><a class="md-toc-inner" href="#install">Installation</a></span>
+    <span class="md-toc-item md-toc-h1"><a class="md-toc-inner" href="#usage">Usage</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#activatorusage">How do I use Activator with AutoTouch?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#scriptRecord">How do I record scripts?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#scriptPlayback">How do I play back a script?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#playSettings">How do I set play settings for script?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#screenshots">How do I take a screenshot?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#scriptWrite">How do I start writing scripts?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#funcHelper">How do I use the "Function Helper" while writing scripts?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#scriptWrite">How do I write and manage scripts on a computer?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#package">What is a package and how do I use it?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#encrypt">How do I encrypt scripts?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#store">How do you sell scripts in Script Store?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#buyScript">How do I download and buy scripts from Script Store?</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#license">How do I buy a AutoTouch license?</a></span>
+    <span class="md-toc-item md-toc-h1"><a class="md-toc-inner" href="#scripting">Scripting</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#tuts">Basis</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#devTools">Development Tools</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#coord">Coordinate, Size and Orientation System</a></span>
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#extnLib">Extension Libraries</a></span>
+    <!-- Extension libraries start -->
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#curl">Lua-cURL</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#luaSocket">LuaSocket</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#luaSec">LuaSec</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#luaSqlite3">luaSqlite3</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#luaFS">LuaFileSystem</a></span>
+    <!-- Extension Libraries end -->
+    <!-- Extension Functions start -->
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#extnFunc">Extension Functions</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#touchDown">touchDown(id, x, y)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#touchUp">touchUp(id, x, y)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#tap">Tap(x, y)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#touchMove">touchMove(id, x, y)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#keyDown">keyDown(keyType)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#keyUp">keyUp(keyType)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getColor">getColor(x, y)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getColors">getColors(locations)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#findColor">findColor(color, count, region)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#findColors">findColors(colors, count, region)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#findImage">findImage(imagePath, count, fuzzy, ignoreColors, region)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#findImage2">findImage2(targetImagePath, targetsToFind)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#screenshot">screenshot(filePath, region)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#appRun">appRun(appIdentifier)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#appKill">appKill(appIdentifier)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#appState">appState(appIdentifier)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#rootDir">rootDir()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#usleep">usleep(microseconds)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#log">log(content)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#alert">alert(message)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#toast">toast(message, delay)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#vibrate">vibrate()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#playAudio">playAudio(audioFile, times)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#stopAudio">stopAudio()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getOrientation">getOrientation()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getScreenResolution">getScreenResolution()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getSN">getSN()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#getVersion">getVersion()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#intToRgb">intToRgb(intColor)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#rgbToInt">rgbToInt(r, g, b)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#copyText">copyText(text)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#clipText">clipText()</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#inputText">inputText(text)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#dialog">dialog(controls, enableRemember)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#clearDialogValues">clearDialogValues(script)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#openURL">openURL(urlString)</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#license">isLicensed()</a></span>
+    <!-- Extension Functions End -->
+    <!-- HTTP API's start -->
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#playScript">Play a script</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#stopScript">Stop playing a script</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#listDir">List files in directory</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#newDir">Create a new directory</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#newFile">Create a new file</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#delFile">Delete a file</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#rename">Rename a file or directory</a></span>
+    <!-- HTTP API's end -->
+    <span class="md-toc-item md-toc-h2"><a class="md-toc-inner" href="#constants">Some Constants</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#physicalKeys">Types of physical keys</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#dialogControls">Types of dialog controls</a></span>
+    <span class="md-toc-item md-toc-h3"><a class="md-toc-inner" href="#screenOrientation">Types of screen orientations</a></span></p>
+</div>
 
-# Usage
 
-## How to install?
-> - You can search and install AutoTouch in Cydia diredctly, it is released in BigBoss.
+
+
+<h1 id="install">Installation</h1>
+
+> - You can search and install AutoTouch in Cydia directly from the BigBoss repo.
 > - You can also add the official repo: http://apt.autotouch.net to Cydia and install AutoTouch there.
-> - There is also a beta repo: http://beta.autotouch.net which contains more fresh but not so stable packages.
+> - There is also a beta repo: http://beta.autotouch.net which has in-progress builds that can be unstable but features are developed much faster
+>
+> If you are experiencing issues with AutoTouch please first check for updates in Cydia and see if this remedies your issue(s).
 
-## How to use Activator?
-> - By default AutoTouch uses volume decrease button holding or pressing to control everything, untill you install Activator by hand.
-> - Add official repo: http://rpetri.ch/repo/ to Cydia.
-> - Install Activator form that repo.
-> - AutoTouch will automatically detect Activator and use it as the default control method.
-> - Customize the actions you want to use to control AutoTouch by Activator.
 
-## How to record?
-> - At the interface where you want to start recording , hold volume decrease button (or other main control action set with Activator by youself, this point will not be repeated below) to call out the control panel.
-![Control Panel](https://i.imgur.com/Rjx5f1b.png)
-> - Press the "Record" button on the control panel to start recording.
-> - It will record all your touching and key pressing to a script until you stop it.
-> - Hold on volume decrease button (or other Activator action) again to stop the recording.
-> - Then, there will be a Lua script named with create time in the script list. You can edit, rename or playback it.
 
-## How to play script?
-> - Hold on volume decrease button to call out the control panel.
-> - Click the script you want to run.
-> - Generally, a dialog for play setting will pop up to determine the repeat times, interval, and speed, unless you've ever set "play diretly" in the play settings for this script  before.
-![Play Settings](https://i.imgur.com/Bq0b4PY.png)
-> - Press the "Play" button on play settings dialog to play immediately.
-> - If you press the "Hold" button, it will enter the "Ready to play" status, in which every time you short press the volume decrease button it will play the script a time. 
-> - Hold volume decrease button to forcedly stop the playing, or quit the "Ready to play" status.
+<h1 id="usage">Usage</h1>
 
-## How to set play settings for script?
-> - You can set an Activator action to trigger a script diretly.
-> - Set "play diretly" to skip the play settings dialog while playing.
+<h2 id="activatorusage">How do I use Activator with AutoTouch? (depends on IOS compatibility)</h2>
 
-## How to take screenshot?
-> - Press “Snap” button on the control panel to take screenshot.
-> - The screenshot will be saved as BMP image which might be used to speficy parameters of getColors, findColors or findImage.
+> - By default the AutoTouch menu pops up when the volume down button is held. This default behavior can changed by installing Activator.
+>
+> - Add the official repo: http://rpetri.ch/repo/ to Cydia. Activator may not support your version of IOS properly, so make sure to check with others. 
+>
+>   *(Jailbreaking discord is a suitable place to ask: https://discord.gg/bHdzaab)*
+>
+> - Install Activator from that repo.
+>
+> - AutoTouch will automatically detect Activator and use it as the default control method. From there you can set what actions will bring up the AutoTouch control panel.
 
-## How to write a script?
-> - Press "+" button on top right of the local script list, choose “Create a script” to open the script editor.
-> - Write the code there.
-> - Press "save" button to save the script.
+<h2 id="scriptRecord">How do I record scripts?</h2>
 
-## How to use the "Function Helper" while script coding?
-> - There are "Extensions", "Indent" and "Statements" buttons on top of the keyboard in the script editor. You can conveniently insert extended functions, indent or common statement of Lua Language.
-> - Press the "Extension" button to present the extended functions list, click a function to insert into the script diretly.
-> - Press the "HELPER" button on the function list, it will help you to determine the coordinates, colors or key flags for the functions.
+> 1. Bring up the AutoTouch control panel by using your chosen activation method 
+>
+>   *Default is to hold the volume down unless you changed it with the Activator tweak.*
+>   <img src='img/recordExample.png' alt='Control Panel' referrerPolicy='no-referrer' class='Image'/>
+>
+> 2. Press the "Record" button to start recording.
+>
+> 3. All touch and key inputs will be recorded into a script.
+>
+> 4. Hold on volume decrease button (or chosen Activator method) again to stop the recording.
+>
+> 5. Then, there will be a Lua script named with create time in the script list. You can edit, rename or play it back.
+>
+> ```sequence
+> Common state->Control panel: Hold volume button
+> Control panel->Recording: Click on 'Record'
+> Recording-->Common state: Hold volume down button again
+> ```
+>
 > 
->   ![Function Helper](https://i.imgur.com/ng2QWrz.png)
 
-## How to write and manage scripts on the computer?
-> - Turn on  Web Server at AutoTouch setting and visit the told URL from browser on computer. Manage scripts there.
-> - You can also turn on WebDAV Server and connect the told address with  WebDAV client on computer. 
+<h2 id="scriptPlayback">How do I play back scripts?</h2>
 
-## How to use Package to orgainize the script project?
-> - You can create a Package as script project to contain different scripts, files and images etc. Package must have a main.lua file as the entrance of the execution. A Package in fact is a directory named with .at extension such as xxx.at.
+> 1. Use your chosen activation method to bring up the AutoTouch control panel.
+> 2. Click the script you want to run.
+> 3. The dialog for playback settings will pop up to determine the number of repeats, interval, and speed of the script. This can be bypassed by setting the script to "play directly" within the AutoTouch app itself 
+>
+> <video width="300" autoplay muted playsinline loop preload="metadata"><source src="video\Script_Play_example.mp4"></video>
+>
+> 
+>
+> 4. Press the "Play" button on play settings dialog to play immediately.
+> 5. If you press the "Hold" button, it will enter the "Ready to play" status, which every time you quick press the volume down button, the script play back once based on the settings you provided it in the previous modal. 
+> 6. Hold volume decrease button to forcibly stop the script playback, or quit the "Ready to play" status.
+>
+> ```sequence
+> Common state->Control panel: Hold volume button
+> Control panel->Play settings: Select a script to play
+> Play settings->Ready to play state: Click the 'Hold' button
+> Ready to play state->Playing: Press volume button
+> Playing-->Ready to play state: Press volume button again
+> Play settings->Playing: Click the "Play" button
+> Playing-->Common state: Hold volume button
+> ```
+>
+> 
+
+<h2 id="playSettings">How do change 'play settings' for scripts?</h2>
+
+> - You can set an Activator action to trigger a script directly.
+>
+> - Additionally you turn on "play directly" to skip the play settings dialog while playing.
+>
+> <img src='img\playDirectly.png' alt='Play Directly Panell' referrerPolicy='no-referrer' class='Image'/>
+
+<h2 id="screenshots">How do I take screenshots?</h2>
+
+> 1. Press “Snap” button on the AutoTouch control panel to take screenshot.
+> 2. The screenshot will be saved as 32-bit BMP image in the 'Screenshots' folder, which can be used to specify parameters of [getColors](#getColors), [findColors](#findColors) or [findImage](#findImage) and more in your scripts. AutoTouch needs image files to be in this format for most operations.
+>
+> Alternatively you may also use the [screenshots function](#screenshot) to capture a screenshot via a script
+
+<h2 id="scriptWrite">How do I start writing scripts?</h2>
+
+> - From within the AutoTouch app, press "+" button at the top right, choose “Create a script” to open the script editor.
+> - Start writing Lua code!
+> - Press "save" button to save the script.
+>
+> <video width="300" autoplay loop muted playsinline preload="metadata"><source src="video\Script_Creation_example.mp4"></video>
+
+<h2 id="funcHelper">How do I use the "Function Helper" while writing scripts?</h2>
+
+> - There are "Extensions", "Indent" and "Statements" buttons on top of the keyboard in the script editor. You can conveniently insert extended functions, indent or common statement of Lua Language.
+> - Press the "Extension" button to be presented with the extended functions list, click a function to insert into the script.
+> - Press the "HELPER" button on the function list, it will help you to determine the coordinates, colors or key flags for the functions.
+>
+<div class="row">
+    <div class="column">
+        <figure>
+            <img src="img\scrHelp1.PNG" class="ImageBorder" alt="Function Help1" referrerpolicy="no-referrer" style="width:100%" onerror="this.style.display = 'none';">
+            <figcaption>1 of 4</figcaption>
+        </figure>
+    </div>
+    <div class="column">
+        <figure>
+            <img src="img\srcHelp2.PNG" class="ImageBorder" alt="Function Help2" referrerpolicy="no-referrer" style="width:100%" onerror="this.style.display = 'none';">
+            <figcaption>2 of 4</figcaption>
+        </figure>
+    </div>
+    <div class="column">
+        <figure>
+            <img src="img\srcHelp3.PNG" class="ImageBorder" alt="Function Help3" referrerpolicy="no-referrer" style="width:100%" onerror="this.style.display = 'none';">
+            <figcaption>3 of 4</figcaption>
+        </figure>
+    </div>
+    <div class="column">
+        <figure>
+            <img src="img\srcHelp4.PNG" class="ImageBorder" alt="Function Help4" referrerpolicy="no-referrer" style="width:100%" onerror="this.style.display = 'none';">
+            <figcaption>4 of 4</figcaption>
+        </figure>
+    </div>
+</div>
+<h2 id="scriptWrite">How do I write and manage scripts on a computer?</h2>s
+
+> - Turn on the Web Server in AutoTouch settings and visit the URL that appears just below,on you preferred browser. You can manage scripts remotely from there.
+> - You can also turn on WebDAV Server and connect the told address with WebDAV client on computer. 
+
+<h2 id="package">What is a package and how do I use it?</h2>
+
+> - You can create a package as sort of script project/folder that will contain different scripts, files and images etc. Packages must have a `main.lua` file which will be run first when executing it through AutoTouch. A package is like a zip file and also support encryption, they are named with `.at` extension i.e `myFirstPackage.at`.
 > - Package can be encrypted to xxx.ate which is also execuate-able and can be released to Script Store.
 
-## How to encrypt the scripts?
-> - Tap accessory button of a package or script in the local script list, choose "Encrypt".
-> - Input the encryption password. Or leave it blank if you don't want one.
-> - Press "Confirm" to complete the encryption. A encrypted file with the same name but ended with .lua.e or .ate will be generated in the script list then.
-> - You can play the encrypted scripts, or release them to Script Store.
+<h2 id="encrypt">How do I encrypt scripts?</h2>
 
-## How to sell your script in Script Store?
-> - Visit https://autotouch.net/server/login.php from browser on computer.
-> - Complete the details required to create a new script. 
-> - Do provide a detailed and beautify html page for that script as the details page, a YouTube video will be much better.
-> - Upload a encrypted script or package as a new version to this script.
-> - Wait for the approvement.
-> - You should setup the Digital Rights Management in the script by yourself, AutoTouch Script Store can not help you by now.
+> 1. Tap accessory button of a package or script in the local script list, choose "Encrypt".
+> 2. Input the encryption password or leave it blank if you do not want one.
+> 3. Press "Confirm" to complete the encryption. A encrypted file with the same name but ended with .lua.e or .ate will be generated in the script list then.
+> 4. You can play the encrypted scripts, or release them to Script Store.
 
-## How to download and buy scripts from Script Store?
-> - You can directly download all scripts from the store.
-> - You need to contact the author to buy the decription password. Do be careful not to be cheated, AutoTouch can do nothing to protect your money provenly.
+<h2 id="store">How do I sell scripts on the store?</h2>
 
-## How to buy AutoTouch license?
-> - Tap License on AutoTouch settings to enter the license management view.
-> - Read the Instructions and do be aware that AutoTouch license has ONE YEAR validity period!
-> -  It will automatically activate current device after the payment if you use PayPal (If failed just follow the next step).
-> - You can query bought licenses with your PayPal ID email, or any activated device SN.
-> - You can activate another device with a license after you query it out.
-> - You can also "Activate Current Device" diretly with a license key bought from other devices.
-> - You should make sure it shows "License Downloaded" at top-right of the License view after it's activated.
-> - It allows only one time activation a day, you may do it again after 24 hours if you need.
-![License View](https://i.imgur.com/CB0Fnfm.jpg)
+> 1. Visit https://autotouch.net/server/login.php from browser on computer.
+> 2. Complete the details required to create a new script. 
+> 3. Create a detailed description and nice looking mobile suitable html page for the script, a YouTube video embeded within the page is preferred.
+> 4. Upload a encrypted script or package as a new version to this script.
+> 5. Wait for approval.
+> 6. You should setup the Digital Rights Management in the script by yourself, AutoTouch Script Store can not help you with that currently.
+>
+> Note: low-effort/recorded scripts will not be accepted please make sure they add something unique!
 
+<h2 id="buyScript">How do I download and buy scripts from Script Store?</h2>
 
-# Script
+> - You can directly download scripts from the store within the AutoTouch app.
+> - You need to contact the author to buy the decryption password. Take care with the transaction,all effort is made to ensure on high quality scripts are uploaded but AutoTouch cannot prevent an author from scamming you, so take care with the payment. Any abuse will lead to a ban from the platform.
 
-## Basis
+<h2 id="license">How do I buy a AutoTouch license? </h2>
+
+> 1. Tap License on AutoTouch settings to enter the license management view.
+> 2. Read the instructions and do be aware that AutoTouch license has a <u>**ONE YEAR**</u> validity period!
+> 3. It will automatically activate current device after the payment if you use PayPal (If failed just follow the next step).
+> 4. You can query bought licenses with your PayPal ID email, or any activated device SN.
+> 5. You can activate another device with a license after you query it out.
+> 6. You can also "Activate Current Device" diretly with a license key bought from other devices.
+> 7. You should make sure it shows "License Downloaded" at top-right of the License view after it is activated.
+> 8. It allows only one time activation a day, you may do it again after 24 hours if you need.
+> 
+><img src='img/license.png' alt='License' referrerPolicy='no-referrer' class='Image'/>
+
+<h1 id="scripting">Scripting </h1>
+
+<h2 id="tuts">References and Tutorials</h2>
+
 You can learn how to use Lua language from here:《[Lua Official Reference Manual](http://www.lua.org/manual/5.3/)》
 
-## Develop Tool
-[LuaStudio](http://luastudio.net/) is aprofessional development environment for debugging Lua script in your applications. It's familiar and fast and you'll wonder how you ever worked without it.
+For further reading consider:
 
-## Coordinate, Size and Orientation System
-AutoTouch uses pixel based Native Resolution as the coordinate and size system. Resolutions of different iOS devices are [here](https://developer.apple.com/library/archive/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Displays/Displays.html), for example, screen size of iPhone X is 1125 x 2436.
+- [Programming in Lua](https://www.lua.org/pil/) - By purchasing these books your money goes straight to supporting the developers of [Lua](https://www.lua.org) and if you purchase the e-book it comes as DRM free 
+- [Lua-wiki Tutorial](http://lua-users.org/wiki/LuaTutorial) - Moderate intro to lua, for people somewhat comfortable with programming concepts already
+- [Lua Crash Course](http://luatut.com/crash_course.html) - Course that runs through everything at a very fast pace, you wont understand much at first, slightly technical
+- [Tutorialspoint - Lua Course](https://www.tutorialspoint.com/lua/) - Free, self contained Lua course for beginners, recommended. The content itself is a bit bland due to a lack of colors or pictures but stick with it
+- [LÖVE - Lua game engine](https://love2d.org/) - LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, Mac OS X, Linux, Android and iOS.
 
-Origin point (0, 0) is alwasy at left-top of the **Application Interface**, regardless of the device orientation. Consider only the App interface while using these functions: touchDown,touchMove,touchUp,getColors,findColors,findImage.
+<h2 id="devTools">Development Tools</h2>
 
-![For example](https://i.imgur.com/imDVXXB.png)
+ [ZeroBrane Studio](https://studio.zerobrane.com/) is a lightweight free/pay what you want open-source Lua IDE with code completion, syntax highlighting, code analyzer, live coding, and debugging support for Lua 5.1, Lua 5.2, Lua 5.3, LuaJIT, and other Lua engines.
 
-## Extension Functions
+> A user created a ZeroBrane plugin that integrates all AutoTouch functions, autocomplete and definitions lookup. Get it [here](https://github.com/Xamanthas/AT_ZBS-API)
 
-Extension functions are used to extend Lua language. Thus, the device can simulate some human abilities of operating the mobile phone. Moreover, extension functions also support functions including: screenshot, color searching, color matching, and picture matching.
+---
 
-### touchDown(id, x, y)
-    Press the coordinate (x,y) on the screen.
+[LuaStudio](http://luastudio.net/) is a professional development environment for debugging Lua script in your applications. It's quite fast but is only based on Lua 5.2 whilst AutoTouch now uses Lua 5.3. The site periodically goes down, not recommended.
+
+---
+
+[AutoMainPNG](https://plaza.rakuten.co.jp/cocoab/) - JP/Eng *(English is little hard to understand)* paid scripting editor made specifically for AutoTouch. Costs money to unlock further features, pretty great idea for scripting noobs but needs clearer translation.
+
+<h2 id="coord">Coordinate, Size and Orientation System</h2>
+
+AutoTouch uses pixel based Native Resolution as the coordinate and size system. Resolutions of different iOS devices are [here](https://developer.apple.com/library/archive/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Displays/Displays.html) however Apple has not updated it since 2017. 
+
+> For example: The screen size of iPhone X is 1125 x 2436.
+
+Origin point (0, 0) is always at the top left of the **Application Interface**, regardless of the device orientation. This concept is used in these functions: 
+
+- Touch emulation:
+  - touchDown,touchMove,touchUp,
+- Return color values of x, y cordinates:
+  - getColor, getColors
+- Find specified color values:
+  - findColor, findColors
+- Find a match to a specified image:
+  - findImage, findImage2
+
+<img src="img\coordinatesExample.jpg" class='image-wide' alt='Cordinates Example' referrerPolicy='no-referrer'/>
+
+
+
+<h2 id="extnLib">Extension Libraries</h2>
+
+AutoTouch has some extension libraries built in, while you can also add these libraries by yourself, just place`.so` files at `/usr/local/lib/lua/5.3` and `.lua` files at `/var/mobile/Library/AutoTouch/Library/LuaLibraries`.
+
+**Warning:** **DO NOT** use script filename same as the libraries’ name, such as `lcurl`, `lfs`, `lsqlite3`
+
+<h3 id="curl">Lua-cURL</h3>
+
+cURL is a command-line tool for getting or sending data including files using [URL](https://en.wikipedia.org/wiki/URL) syntax. It supports communicating with HTTP, HTTPS, FTPS, and many, many [more](https://curl.haxx.se/).
+
+AT implements Lua-cURL V3 for cURL support.
+
+[Documentation](https://lua-curl.github.io/lcurl/modules/cURL.html)
+
+[Github project](https://github.com/Lua-cURL/Lua-cURLv3)
+
+`Examples`
+
+```lua
+-- HTTP Get
+local curl = require('lcurl')
+curl.easy{
+    url = 'http://httpbin.org/get',
+    httpheader = {
+      "X-Test-Header1: Header-Data1",
+      "X-Test-Header2: Header-Data2",
+    },
+    writefunction = alert -- use io.stderr:write()
+  }
+  :perform()
+:close()
+
+-- HTTP Post
+curl.easy()
+  :setopt_url('http://posttestserver.com/post.php')
+  :setopt_writefunction(io.write)
+  :setopt_httppost(curl.form() -- Lua-cURL guarantee that form will be alive
+    :add_content("test_content", "some data", {
+      "MyHeader: SomeValue"
+    })
+    :add_buffer("test_file", "filename", "text data", "text/plain", {
+      "Description: my file description"
+    })
+    :add_file("test_file2", "BuildLog.htm", "application/octet-stream", {
+      "Description: my file description"
+    })
+  )
+  :perform()
+:close()
+```
+
+<h3 id="luaSocket">LuaSocket</h3>
+
+LuaSocket is a Lua extension library which supported [TCP](http://w3.impa.br/~diego/software/luasocket/introduction.html#tcp), [UDP](http://w3.impa.br/~diego/software/luasocket/introduction.html#udp), [SMTP](http://w3.impa.br/~diego/software/luasocket/smtp.html), [HTTP](http://w3.impa.br/~diego/software/luasocket/http.html), [FTP](http://w3.impa.br/~diego/software/luasocket/ftp.html) protocols. Learn how to use it from here](http://w3.impa.br/~diego/software/luasocket/introduction.html).
+
+<h3 id="luaSec">LuaSec</h3>
+
+LuaSec is a binding for OpenSSL library to provide TLS/SSL communication. It takes an already established TCP connection and creates a secure session between the peers. [Learn More](https://github.com/brunoos/luasec/wiki)
+
+<h3 id="luaSqlite3">LuaSqlite3</h3>
+
+LuaSQLite 3 is a thin wrapper around the public domain SQLite3 database engine. [Learn More](http://lua.sqlite.org/index.cgi/doc/tip/doc/lsqlite3.wiki)
+
+`Examples`
+
+```sqlite
+local sqlite3 = require("lsqlite3")
+
+local db = sqlite3.open_memory()
+
+db:exec[[
+  CREATE TABLE test (id INTEGER PRIMARY KEY, content);
+
+  INSERT INTO test VALUES (NULL, 'Hello World');
+  INSERT INTO test VALUES (NULL, 'Hello Lua');
+  INSERT INTO test VALUES (NULL, 'Hello Sqlite3')
+]]
+
+for row in db:nrows("SELECT * FROM test") do
+  log(row.content)
+end
+```
+
+<h3 id="luaFS">LuaFileSystem</h3>
+
+LuaFileSystem is a Lua library developed to complement the set of functions related to file systems offered by the standard Lua distribution. It offers a portable way to access the underlying directory structure and file attributes.[Learn More](https://keplerproject.github.io/luafilesystem/manual.html)
+
+<h2 id="extnFunc">Extension Functions</h2>
+
+Extension functions are used to extend Lua language. With these the device can simulate most human inputs and also achieve automation. Some of these are: screenshot, color searching, color matching, and picture matching.
+
+<h3 id="touchDown">touchDown(id, x, y)</h3>
+
+    Presses a coordinate (x,y) on the screen.
 
 `Parameters`
 
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
-| id    | Integer   |   Finger ID. is used to mark a finger in single-touch or multi-touch. |
+| id    | Integer   |  Finger ID. Used to mark a finger in single-touch or multi-touch. |
 | x     |   Float   |   x-coordinate on the screen   |
 | y     |    Float    |  y-coordinate on the screen  |
 
@@ -155,46 +451,15 @@ tap(100, 200);
 
 ```
 
-### touchMove(id, x, y)
-    Move the finger to coordinate (x,y).
+<h3 id="touchUp">touchUp(id, x, y)</h3>
 
-`Parameters`
-
-| Parameter     | Type   |  Specification  |
-| -------- | :-----:| ----  |
-| id    | Integer   |   Finger ID. is used to mark a finger in single-touch or multi-touch. |
-| x     |   Float   |   x-coordinate on the screen   |
-| y     |    Float    |  y-coordinate on the screen  |
-
-`Return`
-None
-
-`Examples`
-```lua
--- Press by one finger at coordinate (100,200) and move the finger to coordinate (200,200).
-touchDown(0, 100, 200);
-usleep(16000);
-touchMove(0, 200, 200);
-
--- Press by three fingers at three locations on the screen and move to new location.
-touchDown(0, 100, 200);
-touchDown(1, 200, 300);
-touchDown(2, 300, 400);
-usleep(16000);
-touchMove(0, 150, 250);
-touchMove(1, 250, 350);
-touchMove(2, 350, 450);
-
-```
-
-### touchUp(id, x, y)
     Lift the finger from coordinate (x,y)
 
 `Parameters`
 
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
-| id    | Integer   |   Finger ID. is used to mark a finger in single-touch or multi-touch. |
+| id    | Integer   |  Finger ID. Used to mark a finger in single-touch or multi-touch. |
 | x     |   Float   |   x-coordinate on the screen   |
 | y     |    Float    |  y-coordinate on the screen  |
 
@@ -203,7 +468,7 @@ None
 
 `Examples`
 ```lua
--- Click the screen once by one finger at coordinate (100,200).
+-- Click the screen with one finger at coordinate (100,200).
 touchDown(0, 100, 200);
 usleep(16000);
 touchUp(0, 100, 200);
@@ -222,7 +487,72 @@ touchUp(1, 250, 350);
 touchUp(2, 350, 450);
 ```
 
-### keyDown(keyType)
+<h3 id="tap">tap(x, y)</h3>
+
+```Taps with a single finger on the specified coordinate. ```
+
+`Parameters`
+
+| Parameter | Type  | Specification              |
+| :-------- | :---: | -------------------------- |
+| x         | Float | x-coordinate on the screen |
+| y         | Float | y-coordinate on the screen |
+
+`Return`
+None
+
+`Note:`  Tap has far less control due to its simplicity and has no built in randomness. It is recommended to overwrite tap when used in games as it easily detected as the length of the 'finger press' will always be the same
+`Examples`
+
+```lua
+--Example 1: Quickly taps once on the screen
+tap(300, 435);
+usleep(20000);
+
+--Example 2: Uses findColors (discussed later) to look for a particular app icon on the home screen, logs it then taps the resulting co-ordinates. These sorts of cases are where its okay to use the unmodified tap function. In games its too easy to detect
+local result = findColors({{3380451,0,0}, {16777215,1,0}, {9160301,6,0}, {3380451,-2,0}, {14133291,6,45}, {16764976,8,49}, {14556453,35,82}, {228316,-7,76}}, 0, nil);;
+for i, v in pairs(result) do
+	log(string.format("Found the app at: x:%f, y:%f", v[1], v[2]));
+	log(getColor(v[1], v[2]));
+	tap(v[1], v[2]);
+end
+```
+
+<h3 id="touchMove">touchMove(id, x, y)</h3>
+
+    Move the finger to coordinate (x,y).
+
+`Parameters`
+
+| Parameter     | Type   |  Specification  |
+| -------- | :-----:| ----  |
+| id    | Integer   |   Finger ID. is used to mark a finger in single-touch or multi-touch. |
+| x     |   Float   |   x-coordinate on the screen   |
+| y     |    Float    |  y-coordinate on the screen  |
+
+`Return`
+None
+
+`Examples`
+```lua
+-- Press one finger at coordinate (100,200) and move the finger to coordinate (200,200).
+touchDown(0, 100, 200);
+usleep(16000);
+touchMove(0, 200, 200);
+
+-- Press three fingers at three locations on the screen and move to new location.
+touchDown(0, 100, 200);
+touchDown(1, 200, 300);
+touchDown(2, 300, 400);
+usleep(16000);
+touchMove(0, 150, 250);
+touchMove(1, 250, 350);
+touchMove(2, 350, 450);
+
+```
+
+<h3 id="keyDown">keyDown(keyType)</h3>
+
     Simulate the pressing of physical key.
 
 `Parameters`
@@ -252,29 +582,10 @@ function lockScreen()
     keyDown(KEY_TYPE.POWER_BUTTON);
     keyUp(KEY_TYPE.POWER_BUTTON);
 end
-
--- How to simulate a screen unlock function?
-function unlockScreen()
-    keyDown(KEY_TYPE.POWER_BUTTON);
-    keyUp(KEY_TYPE.POWER_BUTTON);
-
-    usleep(1000000);
-
-    local w, h = getScreenResolution();
-
-    local x = 10;
-    local gap = 120;
-    touchDown(0, x, 200);
-    while x < w do
-        x = x + gap;
-        usleep(16000);
-        touchMove(0, x, 200);
-    end
-    touchUp(0, x, 200);
-end
 ```
 
-### keyUp(keyType)
+<h3 id="keyUp">keyUp(keyType)</h3>
+
     Simulate the lifting of physical key.
 
 `Parameters`
@@ -287,6 +598,7 @@ end
 None
 
 `Examples`
+
 ```lua
 -- Simulate the action of pressing and lifting Home Key.
 keyDown(KEY_TYPE.HOME_BUTTON);
@@ -294,8 +606,9 @@ usleep(10000);
 keyUp(KEY_TYPE.HOME_BUTTON);
 ```
 
-### getColor(x, y)
-    Get the color value of the pixel point of the specified coordinate on current screen.
+<h3 id="getColor">getColor(x, y)</h3>
+
+    Get the color value of the pixel point at the specified coordinate.
 
 `Parameters`
 
@@ -316,21 +629,23 @@ alert(string.format("Pixel color is :%d", color));
 -- Pop up color: 16777215
 ```
 
-### getColors(locations)
+<h3 id="getColors">getColors(locations)</h3>
+
     Get the color values of the pixel points of the specified coordinates on current screen.
 
 `Parameters`
 
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
-| locations     |   table   |   A grouo of coordinates, just as {{x1,y1},{x2,y2},{x3,y4}}   |
+| locations     |   table   |   A group of coordinates specifying the points you want to return the color from i.e {{x1,y1},{x2,y2},{x3,y4}}   |
 
 `Return`
 | Return     | Type   |  Specification  |
 | -------- | :-----:| ----  |
-| colors     |   table   |   Colors gotten with corresponding order.  |
+| colors     |   table   |  Colors found are returned in their corresponding order.  |
 
 `Examples`
+
 ```lua
 local result = getColors({{100, 200}, {200, 300}, {300, 400}});
 for i, v in pairs(result) do
@@ -338,7 +653,8 @@ for i, v in pairs(result) do
 end
 ```
 
-### findColor(color, count, region)
+<h3 id="findColor">findColor(color, count, region)</h3>
+
     Search the coordinates of the pixel points matching the specified color on current screen.
 
 `Parameters`
@@ -346,7 +662,7 @@ end
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | color     |   Integer   |   Matched color value.   |
-| count     |   Integer    | The number refers to how many matched pixel points is found at most. 0 is default setting, which shows all matching points are found. 1 refers to only the first matching pixel point is found. 2 refers to only the first two pixel points are found. The less the number is, the faster the speed is.  |
+| count     |   Integer    | The number refers to how many matched pixel points is required for a match. 0 is default setting, which requires all points match (slowest option). 1 refers to only the first matching pixel point is found. 2 refers to only the first two pixel points are found. The lower the number is (above zero), the faster the speed is. |
 | region     |   table    | You only search the result in the specified area. This area is the table type including four values {x, y, width, height}. The four values respectively represent the coordinate x, coordinate y, width, and height of the rectangular area. {100,100,200,200} is an example. If you do not want to specify the area, just input nil.  |
 
 `Return values`
@@ -383,21 +699,30 @@ function findColor(color, count, region)
 end
 ```
 
-### findColors(colors, count, region)
-    Search all rectangular areas matching “specified color and their corresponding location and return the coordinate of the pixel point matching the first color in the rectangular area. This function has the search efficiency and availability far beyond findImage. For example, you need not match the whole key picture, but only match the anchors’ color and their corresponding location on the key. You can specify the number of the results by count parameter. 0 refers to all, 1 refers to the first one, and 2 refers to the first tow. region parameter can specify the search area, which is the table type {x,y,width, height}. You only input nil if no data is specified. 
-    This function can use the “auxiliary” tool in the “Extension Function” of the script-editing interface to select the anchors’ colors from the screenshot and get their corresponding location to the function’s parameter automatically.
-    The coordinate of the pixel point pointed by the arrow is the coordinate of the return value.
-![IMG_0361.PNG-101.9kB](https://i.imgur.com/ODEtwAz.png)
+<h3 id="findColors">findColors(colors, count, region)</h3>
+
+Searches a region for specified colors and their position relative to the other colors matches. If a match is found it returns the coordinate of the matching first color.
+
+This function has the search efficiency far beyond findImage. For example, you do not need to match the whole picture, only the anchor colors and their corresponding location. 
+
+You can specify the number of the results by count parameter. 0 refers to all, 1 refers to the first one, and 2 refers to the first tow. region parameter can specify the search area, which is the table type {x,y,width, height}. You only input nil if no data is specified. The more points you specify to match, the higher the accuracy.
+
+This function can use the 'HELPER' tool in the 'Extension' menu. Select the anchors’ colors in a selected bmp and the tool will supply the corresponding location and color to the function’s parameter automatically.
+
+In the below image, the table highlighted is the coordinate that will be returned upon a match.
+
+<img src="img\findColorsExample.png" alt='Find Colors Example' referrerPolicy='no-referrer'/>
 
 `Parameters`
 
 | Parameter| Type   |  Specification  |
 | -------- | :-----:| ----  |
-| colors     |   table   |  Include some color and their corresponding location, such as:{{0x00ddff,0,0}, {0x00eeff,10,10}, {0x0000ff,0,20}}. The small table in the big table includes 3 values: the first is the color value. The second and the third are the corresponding locations of the colors to the first color. The corresponding location of the first color’s table is always (0,0). {0x00ddff,0,0} is an example. The location values of the successive colors are their locations corresponding to the first color. The matched rectangular area can be found on the screen upon these colors and corresponding location relation.  |
-| count     |   Integer    | The number refers to how many matched pixel points is found at most. 0 is default setting, which shows all matching points are found. 1 refers to only the first matching pixel point is found. 2 refers to only the first two pixel points are found. The less the number is, the faster the speed is. |
-| region     |   table    | You only search the result in the specified area. This area is the table type including four values {x, y, width, height}. The four values respectively represent the coordinate x, coordinate y, width, and height of the rectangular area. {100,100,200,200} is an example. If you do not want to specify the area, just input nil.  |
+| colors     |   table   |  Include color and their corresponding location, such as: `{{0x00ddff,0,0}, {0x00eeff,10,10}, {0x0000ff,0,20}}`. The inner tables includes 3 separate values: the 1st is the color value, the 2nd and 3rd are the x & y coordinates respectively. The corresponding location of the first color’s table is always (0,0) due to it being the origin point from which other coordinates are calculated. `{0x00ddff,0,0}` is an example. The anchor points are calculated relative to the first point.  |
+| count     |   Integer    | The number refers to how many matched pixel points are required to be found before a match is declared. 0 is default setting, which requires all matching points to be found. 1 requires only 1 matching point to be found and so forth. The lower the count (above zero), the faster the script will resolve. |
+| region     |   table    | Specify the search region. This area is the table type that includes four values {x, y, width, height}. The four values represent the coordinate x, coordinate y, width, and height of the rectangular area.  If you do not want to specify the area, just input `nil`. |
 
 `Return values`
+
 | Return value     | Type  |  Specification  |
 | -------- | :-----:| ----  |
 | locations     |   table   |  The coordinate of the first color matched in the found rectangular area, including {{x1, y1}, {x2, y2}, ...}  |
@@ -422,56 +747,61 @@ local colors = {{0x00ddff,0,0}, {0x00eeff,10,10}, {0x0000ff,0,20}};
 local region = {100, 50, 200, 200};
 local result = findColors(colors, 0, region);
 for i, v in pairs(result) do
-    log(string.format("Found rect at: x:%f, y:%f", v[1], v[2]));
+    log(string.format("Found match at: x:%f, y:%f", v[1], v[2]));
+    tap(v[1], v[2]);
 end
 ```
 
-### findImage(imagePath, count, fuzzy, ignoreColors, region)
-    Search the area matched the specified picture on current screen and return the coordinate of the top left corner of all areas by table format.
+<h3 id="findImage">findImage(imagePath, count, fuzzy, ignoreColors, region, debug) </h3>
+
+    Searches the region specified for a match with the provided image and if a match is found returns the coordinate of the top left corner of the matched image
+
+<img src="img\findImage.jpg" alt='Find Image Example' referrerPolicy='no-referrer'/>
 
 `Parameters`
 
-| Parameter     | Type   |  Specification  |
-| -------- | :-----:| ----  |
-| imagePath     |   String   |  The path of picture to be searched. From AutoTouch v3.1.1, you need not input complete path here, but only input the location subordinated to AutoTouch file directory, namely, the path of “Local Script”. (you can get the path of the file directory by rootDir function). For example, “images/script.bmp” means “/var/mobile/Library/AutoTouch/Scripts/images/spirit.bmp”. You need not input the complete path.  |
-| count     |   Integer    | The number refers to how many matched pixel points is found at most. 0 is default setting, which shows all matching points are found. 1 refers to only the first matching pixel point is found. 2 refers to only the first two pixel points are found. The less the number is, the faster the speed is. |
-| fuzzy     |   float    | The floating degree of the search. 1 is default setting and refers to complete matching. 0.5 refers to 50%v of matching. |
-| ignoreColors     |   table   | The color value to be ignored in the search is provided by array, such as {0xffffff, 0x2b2b2b}. You can input nil if one. |
-| region     |   table    | You only search the result in the specified area. This area is the table type including four values {x, y, width, height}. The four values respectively represent the coordinate x, coordinate y, width, and height of the rectangular area. {100,100,200,200} is an example. If you do not want to specify the area, just input nil. |
+| Parameter       |  Type   | Specification                                                | Optional |   Default    |
+| --------------- | :-----: | ------------------------------------------------------------ | :------: | :----------: |
+| targetImagePath | String  | Relative path of the target image to match, for example: “Screenshots/gold.PNG”. Any valid format of images are supported. |    NO    |              |
+| count           | integer | How many matches of the given image you would like to find on-screen. Pass nil if you just want to use the default value. |   YES    |      1       |
+| threshold       |  float  | Searching precision, maximum value is 1 means every anchor point must match exactly, minimum value is 0.2 default is 0.9, usually 0.99 is good. Pass nil if you just want to use the default value. |   YES    |     0.9      |
+| region          |  table  | You only search the result in the specified area. This area is the table type including four values {x, y, width, height}. The four values respectively represent the coordinate x, coordinate y, width, and height of the rectangular area. Pass nil if you just want to use the default value |   YES    | Whole screen |
+| debug           | boolean | If pass debug=true, it will produce a image ends with “-Debug.PNG” in same directory as the target image is, marked with matched areas. |   YES    |    false     |
 
 `Return values`
+
 | Return value     | Type  |  Specification  |
 | -------- | :-----:| ----  |
-| locations     |   table   |  The array at the coordinate on the top left corner of the matched area: {{x1, y1}, {x2, y2}, ...}  |
+| locations     |   table   |  The array at the coordinate on the center of the matched area(s): {{x1, y1}, {x2, y2}, ...}  |
 
 `Examples`
+
 ```lua
 -- Example 1:
-local result = findImage("images/spirit.bmp", 5, 1, nil, nil);
+local result = findImage("Screenshots/Gold.PNG", 5, 0.99, nil, true)
 for i, v in pairs(result) do
     log(string.format("Found rect at: x:%f, y:%f", v[1], v[2]));
 end
 
 -- Example 2:
-local result = findImage("images/spirit.bmp", 0, 0.6, nil, nil};
+local result = findImage("Screenshots/Gold.PNG", nil, nil, nil, true)
 for i, v in pairs(result) do
     log(string.format("Found rect at: x:%f, y:%f", v[1], v[2]));
 end
 
 -- Example 3:
-local result = findImage("images/spirit.bmp", 0, {0xffffff, 0x2b2b2b}, nil};
+local result = findImage("Screenshots/Gold.PNG", 3)
 for i, v in pairs(result) do
     log(string.format("Found rect at: x:%f, y:%f", v[1], v[2]));
 end
 
 -- Example 4:
-local imagePath = "images/spirit.bmp";
-local region = {100, 50, 200, 200};
-local ignoreColors = {0xffffff, 0x2b2b2b};
-local result = findImage(imagePath, 1, 0.9, ignoreColors, region};
+local imagePath = "images/spirit.PNG";
+local region = {100, 100, 300, 300};
+local result = findImage(imagePath, 2, 0.98, region, true)
 for i, v in pairs(result) do
     local x = v[1], y = v[2];
-    
+
     log(string.format("Found rect at: x:%f, y:%f", x, y));
     
     -- Click the found location once.
@@ -480,15 +810,35 @@ for i, v in pairs(result) do
 end
 ```
 
-### screenshot(filePath, region)
-    Take a screenshot for the whole screen or specified area and save as BMP format at specified file path.
+<h3 id="findImage2">findImage2(targetImagePath, targetsToFind) </h3>
+
+`Searches the entire screen for a match to the specified image, it is able to deal with most image size, orientation and color changes intelligently. `
+
+FindImage2 is a powerful successor to findImage allowing you to search for matches in very dynamic applications and games. However these features do come with a performance hit, in most cases it *will* be slower, so you should take care and only use when the powerful features are needed 
+
+`Parameters`
+
+| Parameter                |  Type   | Specification                                                |
+| ------------------------ | :-----: | ------------------------------------------------------------ |
+| imagePath                | String  | The path of the picture, only the subfolders need to be specified if it sits somewhere within the AutoTouch directory. For example, `images/script.bmp` means `/var/mobile/Library/AutoTouch/Scripts/images/spirit.bmp`. You need not input the complete path.<br /> Accepts **only** 32-bit `.bmp` & `.png` |
+| targetsToFind (optional) | Integer | findImage2 handles matching differently. It will only determine a proper match, there is no 'fuzziness'. As such a new parameter called `targetsToFind` controls how many proper matches you want to return. For example: If there are 5 identical footballs on the screen, with the same image provided to the path and you have set `targetsToFind`= 5, then the function will return the coordinates of the 5 matches |
+
+`Return values`
+
+| Return value | Type  | Specification                                                |
+| ------------ | :---: | ------------------------------------------------------------ |
+| locations    | table | The array will be at the center of the matching area: {{x1, y1}, {x2, y2}, ...} |
+
+<h3 id="screenshot">screenshot(filePath, region) </h3>
+
+    Take a screenshot for the whole screen or specified area and save as 32-bit BMP format at specified file path.
 
 `Parameters`
 
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | filePath     |   string   | The path of screenshot. From AutoTouch v3.1.1, you only input the location subordinated to AutoTouch file directory, namely, the path of “Local Script”. (you can get the path of the file directory by rootDir function). For example, “images/script.bmp” means “/var/mobile/Library/AutoTouch/Scripts/images/spirit.bmp”. You need not input the complete path. |
-| region     |   table    | You make a screenshot of the specified area. This area is the table type including four values {x, y, width, height}. The four values respectively represent the coordinate x, coordinate y, width, and height of the rectangular area. {100,100,200,200} is an example. If you do not want to specify the area, just input nil. |
+| region     |   table    | Define the region to take the screenshot with. This area is a table type including four values {x, y, width, height}. {100,100,200,200} is an example. If you do not want to specify the area, just input nil. |
 
 `Return values`
 None
@@ -502,7 +852,8 @@ screenshot ("images/screenshot1.bmp", nil);
 screenshot ("images/screenshot2.bmp", {100, 100, 200, 200});
 ```
 
-### appRun(appIdentifier)
+<h3 id="appRun">appRun(appIdentifier)</h3> 
+
     Run specified application.
 
 `Parameters`
@@ -520,8 +871,9 @@ None
 appRun("com.apple.mobilesafari");
 ```
 
-### appKill(appIdentifier)
-    Kill specified application.
+<h3 id="appRun">appKill(appIdentifier)</h3>
+
+    Kills the specified application.
 
 `Parameters`
 
@@ -534,11 +886,12 @@ None
 
 `Example`
 ```lua
--- Kill the running Safari
+-- Kill running Safari app
 appKill("com.apple.mobilesafari");
 ```
 
-### appState(appIdentifier)
+<h3 id="appState">appState(appIdentifier)</h3>
+
     Get the running state of the specified application
 
 `Parameters`
@@ -560,13 +913,15 @@ alert(string.format("State of Safari: %s", state));
 -- Pop up the state of Safari: "ACTIVATED"
 ```
 
-### rootDir()
+<h3 id="rootDir">rootDir()</h3>
+
     Get the default directory address of the saved script. This is the default saving address of scripts and screenshots: "/var/mobile/Library/AutoTouch/Scripts/".
 
 `Parameters`
 None
 
 `Return values`
+
 | Return value     | Type  |  Specification  |
 | -------- | :-----:| ----  |
 | dir     |   string   |  Default directory address of the saved script. |
@@ -578,7 +933,8 @@ alert(dirPath);
 -- Popup "/var/mobile/Library/AutoTouch/Scripts/"
 ```
 
-### usleep(microseconds)
+<h3 id="usleep">usleep(microseconds) </h3>
+
     Sleep several microseconds (1/1000000)
 
 `Parameters`
@@ -596,7 +952,8 @@ None
 usleep(1000000);
 ```
 
-### log(content)
+<h3 id="log"> log(content)</h3>
+
     Record log, can be seen in the log interface.
 
 `Parameters`
@@ -610,13 +967,19 @@ None
 
 `Examples`
 ```lua
+--Example 1:
 log("play here...");
+
+--Example 2: Formats dynamic data passed by functions into a string AutoTouch can log
+log(string.format("Log test: x:%f, y:%f", v[1], v[2]));
 ```
 
-### alert(message)
-    Pop up the dialog box to show specified content.
+<h3 id="alert">alert(message)</h3>
+
+    Pop up the dialog box, that a user must manually dismiss by clicking "ok"
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | message     |   string   |  Content to be showed. |
@@ -629,10 +992,12 @@ None
 alert("Hello World!");
 ```
 
-### toast(message, delay)
-    Show messages with Toast style and delay for some seconds.
+<h3 id="toast"> toast(message, delay) </h3>
+
+    Show messages with the toast style. Suitable for when you need no interruptions and dont want to have to manually dismiss the message
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | message     |   string   |  Content to be showed. |
@@ -642,13 +1007,15 @@ alert("Hello World!");
 None
 
 `Examples`
+
 ```lua
 toast("Hello I'm a toast!", 5); -- Show message for 5 seconds.
 toast("Hello again!"); -- Show message for 2 seconds.
 ```
 
-### vibrate()
-    Vibrate once.。
+<h3 id="vibrate"> vibrate() </h3>
+
+    Vibrate once.
 
 `Parameters`
 None
@@ -662,10 +1029,12 @@ None
 vibrate();
 ```
 
-### playAudio(audioFile, times)
-    Play audio document at specified location.
+<h3 id="playAudio"> playAudio(audioFile, times) </h3>
+
+    Play audio document at specified location. Known to supports .mp3, .mp4 and .caf , probably supports more.
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | audioFile     |   string   |  Absolute path of audio document. |
@@ -675,12 +1044,14 @@ vibrate();
 None
 
 `Examples`
+
 ```lua
 -- Play audio infinitely.
 playAudio("/var/audio.mp3", 0);
 ```
 
-### stopAudio()
+<h3 id="stopAudio"> stopAudio() </h3>
+
     Stop playing audio.
 
 `Parameters`
@@ -690,13 +1061,15 @@ None
 None
 
 `Examples`
+
 ```lua
 -- Stop playing audio.
 stopAudio();
 ```
 
-### getOrientation()
-    Get orientation of the screen. Return the integer value. Please refer to the “Orientation Type of Screen” for specific correspondence relation.
+<h3 id="getOrientation"> getOrientation() </h3>
+
+    Gets orientation of the screen. Return the integer value. Please refer to the “Orientation Type of Screen” for specific correspondence relation.
 
 `Parameters`
 None
@@ -706,20 +1079,23 @@ None
 | -------- | :-----:| ----  |
 | orientation     |   Integer   |  Screen orientation may be [these values](#types-of-screen-orientations) |
 
-`示例`
+`Examples`
+
 ```lua
 local o = getOrientation();
 alert(string.format("Screen orientation is : %d", 0))
 -- Pop up the orientation 2 of the screen, and mark the reversed screen.
 ```
 
-### getScreenResolution()
-    Get screen resolution bese on pixels.
+<h3 id="getScreenResolution"> getScreenResolution()</h3>
+
+    Gets the current devices screen resolution.
 
 `Parameters`
 None
 
 `Return values`
+
 | Return value     | Type  |  Specification  |
 | -------- | :-----:| ----  |
 | width     |   Integer   |  Width of screen resolution. |
@@ -732,7 +1108,8 @@ alert(string.format("Resolution of iPhone 6 Plus: width:%d, height:%d", w, h));
 -- iPhone 6 Plus’s resolution width is 1242 and resolution height is 2208.
 ```
 
-### getSN()
+<h3 id="getSN">getSN()</h3>
+
      Get Serial Number of the device.
 
 `Parameters`
@@ -750,7 +1127,8 @@ alert(string.format("SN is : %s", sn));
 -- Popup shows the SN of the device: C15NFK32TWD2
 ```
 
-### getVersion()
+<h3 id="getVersion">getVersion()</h3>
+
     Get version of AutoTouch.
 
 `Parameters`
@@ -768,7 +1146,8 @@ alert(string.format("Current version of AutoTouch is : %s", version));
 -- Pop up shows current version of AutoTouch: 3.5.3-4
 ```
 
-### intToRgb(intColor)
+<h3 id="intToRgb">intToRgb(intColor)</h3>
+
     Transit integer color to independent values of R,G,B.
 
 `Parameters`
@@ -777,6 +1156,7 @@ alert(string.format("Current version of AutoTouch is : %s", version));
 | intColor   |   Integer   | Integer color value |
 
 `Return values`
+
 | Return value     | Type  |  Specification  |
 | -------- | :-----:| ----  |
 | R   |   Integer   | Red color value. |
@@ -789,10 +1169,12 @@ local r, g, b = intToRgb(0x2b2b2b);
 alert(string.format("R:%d, G:%d, B:%d", r, g, b));
 ```
 
-### rgbToInt(r, g, b)
+<h3 id="rgbToInt">rgbToInt(r, g, b)</h3>
+
     Transit values of R,G,B to integer color value.
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | R   |   Integer   | Red color value. |
@@ -810,10 +1192,12 @@ local intColor = rgbToInt(200, 255, 100);
 alert(string.format("Int type color: %d", intColor));
 ```
 
-### copyText(text)
+<h3 id="copyText">copyText(text)</h3>
+
     Copy specified text to clipboard.
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | text     |   string   |  Text to be copied. |
@@ -826,7 +1210,8 @@ None
 copyText("This is a copied text!");
 ```
 
-### clipText()
+<h3 id="clipText">clipText()</h3>
+
     Get the text in the clipboard.
 
 `Parameters`
@@ -844,8 +1229,9 @@ alert(text);
 -- Popup shows the text to be copied: "This is a copied text!";
 ```
 
-### inputText(text)
-    Input text to the input box selected now. You can delete a character backspace by inputText("\b").
+<h3 id="inputText">inputText(text)</h3>
+
+    Pastes text to the input box selected now. You can delete a character backspace by inputText("\b").
 
 `Parameters`
 | Parameter     | Type   |  Specification  |
@@ -862,10 +1248,12 @@ inputText("Let's input some text automatically without tapping the keyboard!");
 inputText("\b\b\b"); 
 ```
 
-### dialog(controls, enableRemember)
+<h3 id="dialog">dialog(controls, enableRemember)</h3>
+
     Pop up self-defined dialog box to accept the user input. Please refer to the example for specific usage.
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | controls     |   table   | Array of self-defined controls. You can now use [these dialog box controls](#types-of-dialog-controls)  |
@@ -875,27 +1263,40 @@ inputText("\b\b\b");
 None
 
 `Examples`
-```lua
-local label = {type=CONTROLLER_TYPE.LABEL, text="Would you mind to provide some personal informations?"}
-local nameInput = {type=CONTROLLER_TYPE.INPUT, title="Name:", key="Name", value="Kevin"}
-local positionPicker = {type=CONTROLLER_TYPE.PICKER, title="Position:", key="Position", value="CEO", options={"CEO", "CTO", "CFO", "CXO"}}
-local developerSwitch = {type=CONTROLLER_TYPE.SWITCH, title="A Developer:", key="ADeveloper", value=1}
 
-local controls = {label, nameInput, positionPicker, developerSwitch}
+```lua
+--Dialog example
+
+--Plain text label, used for the overall title of the dialog
+local label = {type=CONTROLLER_TYPE.LABEL, text="AutoTouch Dialog Example"}
+
+--Switch picker with the title as "Use skill combo?"
+local developer2 = {type=CONTROLLER_TYPE.SWITCH, title="Use skill combo?", key="Skillcombo", value=0}
+
+local unitPicker = {type=CONTROLLER_TYPE.PICKER, title="Unit", key="Unit", value="Unit1", options={"Unit1", "Unit3", "Unit3", "Unit4"}}
+
+local collectLootSwitch = {type=CONTROLLER_TYPE.SWITCH, title="Collect loot", key="ADeveloper", value=1}
+
+
+--Defines what to pass to the controls function, if not described here it will not appear
+local controls = {label, developer2, unitPicker, collectLootSwitch}
+
 local enableRemember = true;
 
 -- Pop up the dialog box. After the popup, the script will suspend for user input until the user click “confirm” or “cancel”.
 dialog(controls, enableRemember);
 
 -- Then get the input value of user.
-alert(string.format("name:%s, birthday:%s, gender:%d", nameInput.value, positionPicker.value, developerSwitch.value))
+alert(string.format("Use skillcombo:%s, Unit choice:%s, Collect loot?:%d", developer2.value, unitPicker.value, collectLootSwitch.value))
 ```
-![3.png-115.9kB](http://static.zybuluo.com/kentkrantz/8vn5hx58pc63o12no1xhst81/3.png)
+![3.png-115.9kB](C:\Users\Joshua\repos\AutoTouchDocuments\img\dialogExample.png)
 
-### clearDialogValues(script)
+<h3 id="clearDialogValues">clearDialogValues(script)</h3>
+
     Clear the remembered values of the dialog created by the function dialog.
 
 `Parameters`
+
 | Parameter     | Type   |  Specification  |
 | -------- | :-----:| ----  |
 | script     |   string   | script path. eg. there is a dialog.lua script in the scripts list, use it like this: clearDialogValues("dialog.lua");  |
@@ -904,15 +1305,350 @@ alert(string.format("name:%s, birthday:%s, gender:%d", nameInput.value, position
 None
 
 `Examples`
+
 ```lua
 -- There is a dialog.lua script in the scripts list
 clearDialogValues("dialog.lua");
 ```
 
-## Some Constants
+<h3 id="openURL">openURL(urlString)</h3>
+
+Open url, or open other apps’ url scheme. Look at this [iOS App URL Scheme Names](https://ios.gadgethacks.com/news/always-updated-list-ios-app-url-scheme-names-0184033/) and example: [Google Maps URL Scheme for iOS](https://developers.google.com/maps/documentation/urls/ios-urlscheme)
+
+`Parameters`
+
+| Parameter |  Type  | Specification   |
+| --------- | :----: | --------------- |
+| urlString | string | Target to open. |
+
+`Return`
+
+None
+
+```lua
+Examples
+openURL("https://autotouch.net")
+openURL("prefs:root=General&path=About")
+openURL("musics://")
+openURL("itms-apps://itunes.apple.com")
+openURL("tel://+1123456")
+openURL("clashofclans://")
+```
+
+<h3 id="license">isLicensed()</h3>
+
+Check if the current device is running licensed AutoTouch
+
+`Parameters`
+
+None
+
+`Return`
+
+| Return         |  Type   | Specification                                                |
+| -------------- | :-----: | ------------------------------------------------------------ |
+| license status | boolean | If current device is licensed it will return true else will return false |
+
+```lua
+Examples
+if isLicensed() then
+    alert("Your device is licensed by AutoTouch!");
+end
+```
+
+<h2 id="api">HTTP APIs</h3>
+
+Commands for controlling AutoTouch over Local Area Network (LAN), they use the same APIs as the `Web Server` that you can activate in AutoTouch Settings uses.
+
+<h3 id="playScript">Play a script</h3>
+
+```
+GET /control/start_playing?path=/scriptPath
+```
+
+`Parameters`
+
+| Parameter | Specification |
+| --------- | ------------- |
+| path      | Script path.  |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+```
+
+Examples:
+
+```json
+HTTP GET http://192.168.1.99:8080/control/start_playing?path=/scriptPath
+
+{
+    "status": "fail",
+    "info": "Script doesn't exist."
+}
+```
+
+
+
+<h3 id="stopScript">Stop playing a script</h3>
+
+```
+GET /control/stop_playing?path=/scriptPath
+```
+
+`Parameters`
+
+| Parameter | Specification |
+| --------- | ------------- |
+| path      | Script path.  |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+```
+
+`Example`
+
+```json
+HTTP GET http://192.168.1.99:8080/control/start_playing?path=/scriptPath
+
+{
+    "status": "fail",
+    "info": "Script doesn't exist."
+}
+```
+
+<h3 id="listDir">List files in Directory</h3>
+
+```
+GET /files?path=/Records
+```
+
+`Parameters`
+
+| Parameter | Specification           |
+| --------- | ----------------------- |
+| path      | Directory path to list. |
+
+`Return`
+
+```json
+{
+    "files": [
+        {
+            "filePath": "",
+            "fileSize": "",
+            "iconName": ""
+        },
+        ...
+    ]
+}
+```
+
+`Examples`
+
+```json
+HTTP GET http://192.168.1.99:8080/files?path=/Records
+{    "files": [
+        {
+            "filePath": "/Records/2019-03-10: 12:00:00.lua",
+            "fileSize": "12kb",
+            "iconName": "script"
+        },
+        ...
+    ]
+}
+```
+
+<h3 id="newDir">Create a new directory</h3>
+
+```
+GET /file/newFolder?path=/Test
+```
+
+`Parameters`
+
+| Parameter | Specification                 |
+| --------- | ----------------------------- |
+| path      | New Directory path to create. |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+Examples
+HTTP GET http://192.168.1.99:8080/file/newFolder?path=/Test
+{
+    "status": "success"
+}
+```
+
+<h3 id="newFile">Create a new file</h3>
+
+``` 
+GET /file/new?path=/newFilePath
+```
+
+`Parameters`
+
+| Parameter | Specification          |
+| --------- | ---------------------- |
+| path      | New file path to make. |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+```
+Examples:
+```json
+HTTP GET http://192.168.1.99:8080/file/new?path=/newFilePath
+{
+    "status": "fail",
+    "info": "Invalid file path"
+}
+```
+
+<h3 id="delFile">Delete a file</h3>
+
+```
+GET /file/delete?path=/filePathToDelete
+```
+
+`Parameters`
+
+| Parameter | Specification        |
+| --------- | -------------------- |
+| path      | File path to delete. |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+```
+Examples:
+
+```json
+HTTP GET http://192.168.1.99:8080/file/delete?path=/filePathToDelete
+{
+    "status": "fail",
+    "info": "Invalid file path"
+}
+```
+
+<h3 id="rename">Rename a file or directory</h3>
+
+```
+GET /file/rename?path=/oldFilePath&newPath=newFilePath
+```
+
+`Parameters`
+
+| Parameter | Specification |
+| --------- | ------------- |
+| path      | Old path.     |
+| newPath   | New path.     |
+
+`Return`
+
+Successful:
+
+```json
+{
+    "status": "success"
+}
+```
+
+Failed:
+
+```json
+{
+    "status": "fail",
+    "info": ""
+}
+```
+
+Examples:
+```json
+HTTP GET http://192.168.1.99:8080/file/rename?path=/oldFilePath&newPath=newFilePath
+{
+    "status": "fail",
+    "info": "Invalid file path"
+}
+```
+
+<h2 id="constants">Constants</h2>
 
 <a name="types-of-physical-keys"></a>
-### Types of physical keys
+
+<h3 id="physicalKeys">Types of physical keys</h3>
 
 | Value     |  Specification  |
 | -------- | ----  |
@@ -922,7 +1658,8 @@ clearDialogValues("dialog.lua");
 | KEY_TYPE.POWER_BUTTON | Power Button |
 
 <a name="types-of-dialog-controls"></a>
-### Types of dialog controls
+
+<h3 id="dialogControls">Types of dialog controls</h3>
 
 | Value     |  Specification  |
 | -------- | ----  |
@@ -932,7 +1669,8 @@ clearDialogValues("dialog.lua");
 | CONTROLLER_TYPE.SWITCH | Switch |
 
 <a name="types-of-screen-orientations"></a>
-### Types of screen orientations
+
+<h3 id="screenOrientation">Types of screen orientations</h3>
 
 | Value     |  Specification  |
 | -------- | ----  |
